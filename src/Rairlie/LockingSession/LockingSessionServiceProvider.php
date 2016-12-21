@@ -5,6 +5,12 @@ use Illuminate\Session\SessionServiceProvider;
 
 class LockingSessionServiceProvider extends SessionServiceProvider
 {
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '/../../../config/laravel-locking-session.php' => config_path('laravel-locking-session.php'),
+        ]);
+    }
 
     /**
      * Override so we return our own Middleware\StartSession
@@ -13,6 +19,8 @@ class LockingSessionServiceProvider extends SessionServiceProvider
      */
     public function register()
     {
+        $this->mergeConfig();
+
         $this->registerSessionManager();
 
         $this->registerSessionDriver();
@@ -32,6 +40,14 @@ class LockingSessionServiceProvider extends SessionServiceProvider
         $this->app->singleton('session', function ($app) {
             return new SessionManager($app);
         });
+    }
+
+    /**
+     * @return void
+     */
+    protected function mergeConfig()
+    {
+        $this->mergeConfigFrom(__DIR__ . '/../../../config/laravel-locking-session.php', 'laravel-locking-session');
     }
 
 }

@@ -15,8 +15,6 @@ class Lock
     protected $lockfp;
     protected $debug = false;
 
-    const LOCKDIR_NAME = 'sessionlocks';
-
     /**
      * Constructor
      *
@@ -86,7 +84,7 @@ class Lock
 
     protected function getLockDir()
     {
-        return sys_get_temp_dir() . '/' . self::LOCKDIR_NAME . '/';
+        return config('laravel-locking-session.lock-files-directory') . '/';
     }
 
     /**
